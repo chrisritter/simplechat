@@ -47,7 +47,7 @@ public class ChannelServlet extends HttpServlet {
 					}
 				}
 			}
-			HashMap<String, String> map = new HashMap<String, String>();
+			Map<String, String> map = new HashMap<String, String>();
 			map.put("type", "signin");
 			map.put("userId", userId);
 			broadcastMessage(signedInUsers, map);
@@ -84,11 +84,12 @@ public class ChannelServlet extends HttpServlet {
 	}
 	
 	public static void broadcastMessage(List<String> signedInUsers, Map<String, String> map) {
+        if(signedInUsers == null) {
+            throw new IllegalArgumentException("Channel presence to /_ah/channel/connected|disconnected is set up wrong");
+        }
+
 		String message = new Gson().toJson(map);
 		ChannelService channelService = ChannelServiceFactory.getChannelService();
-		if(signedInUsers == null) {
-			throw new IllegalArgumentException("Channel presence to /_ah/channel/connected|disconnected is set up wrong");
-		}
 		for(String userId : signedInUsers) {
 			channelService.sendMessage(new ChannelMessage(userId,message));
 		}
