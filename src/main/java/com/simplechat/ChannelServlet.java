@@ -90,6 +90,7 @@ public class ChannelServlet extends HttpServlet {
 
 		String message = new Gson().toJson(map);
 		ChannelService channelService = ChannelServiceFactory.getChannelService();
+		NamespaceManager.set("hello");
 		for(String userId : signedInUsers) {
 			channelService.sendMessage(new ChannelMessage(userId,message));
 		}
